@@ -3,6 +3,103 @@ import { nanoid } from 'nanoid';
 const books = [];
 
 function getBooks(req, hapi) {
+  const { name, reading, finished } = req.query;
+
+  // check name
+  if (name) {
+    const data = books
+    .filter((element) => element.name.toLowerCase().includes(name.toLowerCase()))
+    .map((book) => { 
+      return {
+        id: book.id,
+        name: book.name, 
+        publisher: book.publisher,
+      };
+    });
+
+    return hapi.response({
+      status: 'success',
+      data: {
+        books: data,
+      },
+    }).code(200);
+  }
+
+  // check reading
+  if (reading !== undefined) {
+    // reading true
+    if (Number(reading) === 1) {
+      const data = books.filter((element) => element.reading === true).map((book) => {
+        return {
+          id: book.id,
+          name: book.name,
+          publisher: book.publisher,
+        };
+      });
+
+      return hapi.response({
+        status: 'success',
+        data: {
+          books: data,
+        },
+      });
+    }
+
+    // reading false
+    const data = books.filter((element) => element.reading === false).map((book) => {
+      return {
+        id: book.id,
+        name: book.name,
+        publisher: book.publisher,
+      };
+    });
+
+    return hapi.response({
+      status: 'success',
+      data: {
+        books: data,
+      },
+    });
+  }
+  
+  // check finished
+  if (finished !== undefined) {
+    // finished true
+    if (Number(finished) === 1) {
+      const data = books.filter((element) => element.finished === true).map((book) => {
+        return {
+          id: book.id,
+          name: book.name,
+          publisher: book.publisher,
+        };
+      });
+
+      return hapi.response({
+        status: 'success',
+        data: {
+          books: data,
+        },
+      }).code(200);
+    }
+
+    // finished false
+    const data = books.filter((element) => element.finished === false).map((book) => {
+      return {
+        id: book.id,
+        name: book.name,
+        publisher: book.publisher,
+      };
+    });
+
+    return hapi.response({
+      status: 'success',
+      data: {
+        books: data,
+      },
+    }).code(200);
+  }
+
+  // check books if not empty
   if (books.length !== 0) {
     return hapi.response({
       status: 'success',
